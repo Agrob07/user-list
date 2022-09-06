@@ -23,6 +23,7 @@ export const userSlice = createSlice({
       state.userList = [...state.userList, action.payload];
     },
     deleteUser: (state, action) => {
+      console.log(111, action);
       state.userList = state.userList.filter(
         (user) => user.id !== action.payload
       );
@@ -47,7 +48,7 @@ export const userSlice = createSlice({
   // },
 });
 
-export const { addUser, deleteUser,editUser } = userSlice.actions;
+export const { addUser, deleteUser, editUser } = userSlice.actions;
 
 export const selectUsers = (state) => state.users.userList;
 

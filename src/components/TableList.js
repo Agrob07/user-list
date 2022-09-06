@@ -1,7 +1,7 @@
 import React from "react";
 import { useTable } from "react-table";
 
-function TableData({ data, columns }) {
+function TableList({ data, columns }) {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({
       columns,
@@ -44,4 +44,4 @@ function TableData({ data, columns }) {
     </>
   );
 }
-export default TableData;
+export default TableList;

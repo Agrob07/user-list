@@ -27,7 +27,6 @@ export default function Modal({ show, setShow, user }) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
- 
   const initValues = {
     username: "",
     age: 0,
