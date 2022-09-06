@@ -3,6 +3,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 const initialState = {
   status: "idle",
   userList: [],
+  sortDetails: {},
 };
 
 // export const fetchUsersAsync = createAsyncThunk(
@@ -28,6 +29,34 @@ export const userSlice = createSlice({
         (user) => user.id !== action.payload
       );
     },
+    sortByColumn: (state, action) => {
+      console.log(action);
+      state.userList = state.userList.sort((a, b) => {
+        if (state.sortDetails.sort === "asc") {
+          if (a[action.payload] < b[action.payload]) {
+            return -1;
+          }
+          if (a[action.payload] > b[action.payload]) {
+            return 1;
+          }
+          return 0;
+        }
+        if (state.sortDetails.sort === "desc") {
+          if (a[action.payload] < b[action.payload]) {
+            return 1;
+          }
+          if (a[action.payload] > b[action.payload]) {
+            return -1;
+          }
+          return 0;
+        }
+      });
+      state.sortDetails.access = action.payload;
+      state.sortDetails.sort =
+        state.sortDetails.sort === "asc"
+          ? (state.sortDetails.sort = "desc")
+          : (state.sortDetails.sort = "asc");
+    },
     editUser: (state, action) => {
       state.userList = state.userList.map((user) => {
         return user.id === action.payload.id ? (user = action.payload) : user;
@@ -48,7 +77,8 @@ export const userSlice = createSlice({
   // },
 });
 
-export const { addUser, deleteUser, editUser } = userSlice.actions;
+export const { addUser, deleteUser, editUser, sortByColumn } =
+  userSlice.actions;
 
 export const selectUsers = (state) => state.users.userList;
 

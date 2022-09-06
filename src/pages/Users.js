@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import UserList from "../components/UserList";
 import { useSelector, useDispatch } from "react-redux";
 import { selectUsers } from "../features/counter/counterSlice";
-import { deleteUser } from "../features/counter/counterSlice";
+import { sortByColumn } from "../features/counter/counterSlice";
 import Tooltip from "../components/Tooltip";
 const Users = () => {
   const [show, setShow] = useState(false);
-  const [activeRowId, setActiveRowId] = useState('');
+  const [activeRowId, setActiveRowId] = useState("");
   const userList = useSelector(selectUsers);
   const dispatch = useDispatch();
   const data = userList.map((item) => item);
@@ -18,7 +18,7 @@ const Users = () => {
     if (!activeRowId) {
       setActiveRowId(rowId);
     } else {
-      setActiveRowId('');
+      setActiveRowId("");
     }
     console.log(8888888888888888, rowId);
     setShow(!show);
@@ -28,7 +28,17 @@ const Users = () => {
     {
       key: "id",
       title: "ID",
-      Header: "USERNAME",
+      Header: () => {
+        return (
+          <span
+            onClick={() => {
+              dispatch(sortByColumn("username"));
+            }}
+          >
+            USERNAME
+          </span>
+        );
+      },
       accessor: "username",
       render: (cell) => {
         cell.sort(function (a, b) {
@@ -101,7 +111,11 @@ const Users = () => {
   return (
     <>
       <UserList data={userList} columns={columns} />
-      <Tooltip rowId={activeRowId} toggleModal={toggleDeleteModal} show={show} />
+      <Tooltip
+        rowId={activeRowId}
+        toggleModal={toggleDeleteModal}
+        show={show}
+      />
     </>
   );
 };
