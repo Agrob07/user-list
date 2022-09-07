@@ -1,84 +1,68 @@
 import React, { useState } from "react";
-import UserList from "../components/UserList";
 import { useSelector, useDispatch } from "react-redux";
-import { selectUsers } from "../features/counter/counterSlice";
-import { sortByColumn } from "../features/counter/counterSlice";
+import UserList from "../components/UserList";
 import Tooltip from "../components/Tooltip";
+import { deleteUser, selectUsers, sortByColumnAge,sortByColumnUserName} from "../features/counter/counterSlice";
+import { AiFillCaretDown,AiFillCaretUp } from "react-icons/ai";
+
+
+
 const Users = () => {
   const [show, setShow] = useState(false);
+  const [showIcon, setShowIcon] = useState(false)
   const [activeRowId, setActiveRowId] = useState("");
   const userList = useSelector(selectUsers);
   const dispatch = useDispatch();
-  const data = userList.map((item) => item);
-  const users = Object.values(data[0]);
-  const id = users[0];
-  console.log(users, id);
 
   const toggleDeleteModal = (rowId) => {
-    if (!activeRowId) {
-      setActiveRowId(rowId);
-    } else {
-      setActiveRowId("");
-    }
-    console.log(8888888888888888, rowId);
+    !activeRowId ? setActiveRowId(rowId) : setActiveRowId("")
     setShow(!show);
+    dispatch(deleteUser(activeRowId));
+    
   };
 
   const columns = [
     {
-      key: "id",
-      title: "ID",
       Header: () => {
         return (
-          <span
-            onClick={() => {
-              dispatch(sortByColumn("username"));
-            }}
-          >
-            USERNAME
+          <span>
+          USERNAME
+          <button onClick={()=>{
+              setShowIcon (!showIcon)
+              dispatch(sortByColumnUserName("username"))}
+            }>
+            {showIcon ? <AiFillCaretUp/> : <AiFillCaretDown/>}
+            </button>
           </span>
         );
       },
       accessor: "username",
-      render: (cell) => {
-        cell.sort(function (a, b) {
-          if (a.name < b.name) {
-            return -1;
-          }
-          if (a.name > b.name) {
-            return 1;
-          }
-          return 0;
-        });
-      },
     },
     {
-      key: "id",
-      title: "ID",
-      Header: "AGE",
+      Header: () => {
+        return (
+          <span >
+            AGE
+            <button onClick={()=>{
+              setShowIcon (!showIcon)
+              dispatch(sortByColumnAge("age"))}
+            }>
+            {showIcon ? <AiFillCaretUp/> : <AiFillCaretDown/>}
+            </button>
+          </span>
+        )
+      },
       accessor: "age",
-      render: (val) => {
-        <>
-          {val}
-          <span>Icon</span>
-        </>;
-      },
     },
     {
-      key: "id",
-      title: "ID",
       Header: "CITY",
       accessor: "city",
     },
     {
-      key: "id",
-      title: "ID",
       Header: "EMAIL",
       accessor: "email",
     },
     {
-      key: "id",
-      title: "ID",
       Header: "ACTHION",
       accessor: "action",
       Cell: (cell) => (
@@ -88,7 +72,6 @@ const Users = () => {
          focus:ring-indigo-600 mx-auto transition duration-150 ease-in-out 
          hover:bg-indigo-600 bg-indigo-700 rounded text-white px-4 sm:px-8 py-2 text-xs sm:text-sm"
           >
-            {" "}
             Edit
           </button>
           ,
@@ -112,7 +95,7 @@ const Users = () => {
     <>
       <UserList data={userList} columns={columns} />
       <Tooltip
-        rowId={activeRowId}
+        setShow = {setShow}
         toggleModal={toggleDeleteModal}
         show={show}
       />

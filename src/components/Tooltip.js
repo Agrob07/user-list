@@ -1,10 +1,7 @@
 import React from "react";
-import { deleteUser } from "../features/counter/counterSlice";
-import { useDispatch } from "react-redux";
 
-function Tooltip({ toggleModal, show, rowId }) {
-  const dispatch = useDispatch();
-  return (
+function Tooltip({ toggleModal, show, setShow }) {
+ return (
     <>
       {show ? (
         <div>
@@ -16,7 +13,7 @@ function Tooltip({ toggleModal, show, rowId }) {
               <div className=" pt-3 flex gap-2">
                 <button
                   onClick={() => {
-                    toggleModal();
+                    setShow(!show)
                   }}
                   className="text-xs font-medium leading-3 text-center text-indigo-700 px-3 py-2 border 
       rounded-md border-indigo-700 w-full hover:bg-gray-100 transform duration-300 ease-in-out"
@@ -25,7 +22,6 @@ function Tooltip({ toggleModal, show, rowId }) {
                 </button>
                 <button
                   onClick={() => {
-                    dispatch(deleteUser(rowId));
                     toggleModal();
                   }}
                   className="text-xs font-medium leading-3 text-center text-white px-3 py-2

@@ -33,7 +33,8 @@ function TableList({ data, columns }) {
               >
                 {row.cells.map((cell) => {
                   return (
-                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                    <td style={{ border: "1px solid rgba(220,220,220 ,50)"}}
+                    {...cell.getCellProps()}>{cell.render("Cell")}</td>
                   );
                 })}
               </tr>

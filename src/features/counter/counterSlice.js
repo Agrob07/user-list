@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { toggledSort } from "../../helpers/toogleSort";
 
 const initialState = {
   status: "idle",
-  userList: [],
+  userList: ["sername",15],
   sortDetails: {},
 };
 
@@ -29,39 +30,40 @@ export const userSlice = createSlice({
         (user) => user.id !== action.payload
       );
     },
-    sortByColumn: (state, action) => {
-      console.log(action);
-      state.userList = state.userList.sort((a, b) => {
-        if (state.sortDetails.sort === "asc") {
-          if (a[action.payload] < b[action.payload]) {
-            return -1;
-          }
-          if (a[action.payload] > b[action.payload]) {
-            return 1;
-          }
-          return 0;
-        }
-        if (state.sortDetails.sort === "desc") {
-          if (a[action.payload] < b[action.payload]) {
-            return 1;
-          }
-          if (a[action.payload] > b[action.payload]) {
-            return -1;
-          }
-          return 0;
-        }
-      });
-      state.sortDetails.access = action.payload;
-      state.sortDetails.sort =
-        state.sortDetails.sort === "asc"
-          ? (state.sortDetails.sort = "desc")
-          : (state.sortDetails.sort = "asc");
-    },
-    editUser: (state, action) => {
+     editUser: (state, action) => {
       state.userList = state.userList.map((user) => {
         return user.id === action.payload.id ? (user = action.payload) : user;
       });
     },
+    sortByColumnAge: (state, action) => {
+      state.userList = state.userList = state.userList.sort((a, b) => {
+        if (state.sortDetails.sort === "asc") {
+        if (a[action.payload] < b[action.payload]) {
+        return -1;
+        }
+        if (a[action.payload] > b[action.payload]) {
+        return 1;
+        }
+        return 0;
+        }
+        if (state.sortDetails.sort === "desc") {
+        if (a[action.payload] < b[action.payload]) {
+        return 1;
+        }
+        if (a[action.payload] > b[action.payload]) {
+        return -1;
+        }
+        return 0;
+        }
+        });
+        state.sortDetails.access = action.payload;
+        state.sortDetails.sort =
+        state.sortDetails.sort === "asc" ? (state.sortDetails.sort = "desc")
+        : (state.sortDetails.sort = "asc");
+      },
+      sortByColumnUserName : (state,action) => {
+      
+      }
   },
 
   // extraReducers: (builder) => {
@@ -77,7 +79,7 @@ export const userSlice = createSlice({
   // },
 });
 
-export const { addUser, deleteUser, editUser, sortByColumn } =
+export const { addUser, deleteUser, editUser, sortByColumnAge,sortByColumnUserName } =
   userSlice.actions;
 
 export const selectUsers = (state) => state.users.userList;
