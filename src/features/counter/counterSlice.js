@@ -3,7 +3,7 @@ import { toggledSort } from "../../helpers/toogleSort";
 
 const initialState = {
   status: "idle",
-  userList: ["sername",15],
+  userList: [],
   sortDetails: {},
 };
 
@@ -25,45 +25,49 @@ export const userSlice = createSlice({
       state.userList = [...state.userList, action.payload];
     },
     deleteUser: (state, action) => {
-      console.log(111, action);
       state.userList = state.userList.filter(
         (user) => user.id !== action.payload
       );
     },
-     editUser: (state, action) => {
-      state.userList = state.userList.map((user) => {
-        return user.id === action.payload.id ? (user = action.payload) : user;
+    editUser: (state, action) => {
+      state.userList = state.userList.map((user, idx) => {
+        console.log(action.payload);
+        return user.id === action.payload.id
+          ? (state.userList[idx] = action.payload)
+          : user;
       });
+      console.log(state.userList);
     },
     sortByColumnAge: (state, action) => {
       state.userList = state.userList = state.userList.sort((a, b) => {
         if (state.sortDetails.sort === "asc") {
-        if (a[action.payload] < b[action.payload]) {
-        return -1;
-        }
-        if (a[action.payload] > b[action.payload]) {
-        return 1;
-        }
-        return 0;
+          if (a[action.payload] < b[action.payload]) {
+            return -1;
+          }
+          if (a[action.payload] > b[action.payload]) {
+            return 1;
+          }
+          return 0;
         }
         if (state.sortDetails.sort === "desc") {
-        if (a[action.payload] < b[action.payload]) {
-        return 1;
+          if (a[action.payload] < b[action.payload]) {
+            return 1;
+          }
+          if (a[action.payload] > b[action.payload]) {
+            return -1;
+          }
+          return 0;
         }
-        if (a[action.payload] > b[action.payload]) {
-        return -1;
-        }
-        return 0;
-        }
-        });
-        state.sortDetails.access = action.payload;
-        state.sortDetails.sort =
-        state.sortDetails.sort === "asc" ? (state.sortDetails.sort = "desc")
-        : (state.sortDetails.sort = "asc");
-      },
-      sortByColumnUserName : (state,action) => {
-      
-      }
+      });
+      state.sortDetails.access = action.payload;
+      state.sortDetails.sort =
+        state.sortDetails.sort === "asc"
+          ? (state.sortDetails.sort = "desc")
+          : (state.sortDetails.sort = "asc");
+    },
+    sortByColumnUserName: (state, action) => {
+      Array.from(state.userList).sort();
+    },
   },
 
   // extraReducers: (builder) => {
@@ -79,8 +83,13 @@ export const userSlice = createSlice({
   // },
 });
 
-export const { addUser, deleteUser, editUser, sortByColumnAge,sortByColumnUserName } =
-  userSlice.actions;
+export const {
+  addUser,
+  deleteUser,
+  editUser,
+  sortByColumnAge,
+  sortByColumnUserName,
+} = userSlice.actions;
 
 export const selectUsers = (state) => state.users.userList;
 

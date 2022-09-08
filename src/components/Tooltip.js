@@ -1,7 +1,7 @@
 import React from "react";
 
-function Tooltip({ toggleModal, show, setShow }) {
- return (
+function Tooltip({ toggleModal, show, setShow, deleteRow, rowID }) {
+  return (
     <>
       {show ? (
         <div>
@@ -13,7 +13,7 @@ function Tooltip({ toggleModal, show, setShow }) {
               <div className=" pt-3 flex gap-2">
                 <button
                   onClick={() => {
-                    setShow(!show)
+                    setShow(!show);
                   }}
                   className="text-xs font-medium leading-3 text-center text-indigo-700 px-3 py-2 border 
       rounded-md border-indigo-700 w-full hover:bg-gray-100 transform duration-300 ease-in-out"
@@ -22,7 +22,7 @@ function Tooltip({ toggleModal, show, setShow }) {
                 </button>
                 <button
                   onClick={() => {
-                    toggleModal();
+                    deleteRow(rowID);
                   }}
                   className="text-xs font-medium leading-3 text-center text-white px-3 py-2
        bg-indigo-700 rounded-md w-full hover:bg-indigo-600 transform duration-300 ease-in-out"
