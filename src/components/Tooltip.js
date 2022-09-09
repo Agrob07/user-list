@@ -1,6 +1,6 @@
 import React from "react";
 
-function Tooltip({ toggleModal, show, setShow, deleteRow, rowID }) {
+function Tooltip({ show, setShow, deleteRow, rowID }) {
   return (
     <>
       {show ? (

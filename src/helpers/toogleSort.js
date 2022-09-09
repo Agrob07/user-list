@@ -36,3 +36,48 @@
 // ? (state.sortDetails.sort = "desc")
 // : (state.sortDetails.sort = "asc");
 
+
+
+// {!userOnEdit ? (
+//   <p>{cell.row.original.username}</p>
+// ) : (
+//   <input
+//     name="username"
+//     value={userOnEdit.username}
+//     type={"text"}
+//     className="bg-red-500"
+//     onChange={({ target }) =>
+//       handleInputChange(target.name, target.value)
+
+
+// const handleInputChange = (key, value) => {
+//   setUserOnEdit(() => ({
+//     ...userOnEdit,
+//     [key]: value,
+//   }));
+
+//   console.log(inputValue);
+// };
+
+
+
+
+
+// const toggleSortedList = () =>{
+//   const filteredList = [...userList].sort((prev, next) => {
+//     if (parseInt(prev[value])) {
+//       if (showIcon) {
+//         return prev[value] - next[value];
+//       } else {
+//         return next[value] - prev[value];
+//       }
+//     } else {
+//       if (showIcon) {
+//         return prev[value].localeCompare(next[value]);
+//       } else {
+//         return next[value].localeCompare(prev[value]);
+//       }
+//     }
+//   });
+//   return filteredList
+// }

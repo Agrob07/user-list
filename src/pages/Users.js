@@ -6,9 +6,7 @@ import {
   deleteUser,
   editUser,
   selectUsers,
-  sortByColumnAge,
-  sortByColumnUserName,
-} from "../features/counter/counterSlice";
+} from "../features/counter/usersSlice";
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 
 const Users = () => {
@@ -17,9 +15,12 @@ const Users = () => {
   const [userOnEdit, setUserOnEdit] = useState(null);
   const [activeRowId, setActiveRowId] = useState("");
   const [inputValue, setInputValue] = useState("");
+  const [sortOptions, setSortOptions] = useState({})
+
 
   const userList = useSelector(selectUsers);
   const [currentList, setCurrentList] = useState(userList);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -36,51 +37,74 @@ const Users = () => {
     setShow(false);
   };
 
-  const handleSortClick = (e) => {
-    const value = e.currentTarget.value;
-    setShowIcon(!showIcon);
-    const filteredList = [...userList].sort((prev, next) => {
-      if (parseInt(prev[value])) {
-        if (showIcon) {
-          return prev[value] - next[value];
-        } else {
-          return next[value] - prev[value];
-        }
-      } else {
-        if (showIcon) {
-          return prev[value].localeCompare(next[value]);
-        } else {
-          return next[value].localeCompare(prev[value]);
-        }
-      }
-    });
-    setCurrentList(filteredList);
-  };
+  const handleSortClick = (sortBy,sortType) => {
+    setSortOptions({
+      sortBy,
+      sortType,
+    })
+};
+
+const toggleSortedList = () =>{
+  const filteredList = [...userList].sort((prev, next) => {  
+    if(sortOptions.sortType = "asc") {
+      if(sortOptions.sortBy === "age"){
+         setShowIcon(true)
+        { <AiFillCaretDown/>}  
+     }else{
+  setShowIcon(false)
+   { <AiFillCaretUp/>}
+   } 
+      if (prev < next ) {
+        return 1
+      } else if (next < prev){
+        return -1
+      }else {return 0}
+
+    }
+    if(sortOptions.sortType = "asc"){
+      if(sortOptions.sortBy === "username"){
+        setShowIcon(true)
+        { <AiFillCaretDown/>}  
+         return prev.localeCompare(next)
+       
+     }else{
+      setShowIcon(false)
+      { <AiFillCaretDown/>}  
+      return next.localeCompare(prev);
+     }
+    
+    }
+  });
+  return filteredList
+}
 
   const handleEdit = (id) => {
     userList.forEach((user) => user.id === id && setUserOnEdit(user));
   };
+
+
   const handleEditSubmit = () => {
     dispatch(editUser(userOnEdit));
+    console.log(123,userOnEdit.username);
     setUserOnEdit(null);
   };
 
-  const handleInputChange = (key, value) => {
-    setUserOnEdit(() => ({
-      ...userOnEdit,
-      [key]: value,
-    }));
 
-    console.log(inputValue);
-  };
+  const handleInputChange = (key, value) =>{
+    setInputValue(userOnEdit.username)
+
+  }
+
+
   const columns = [
     {
       Header: () => {
         return (
           <span>
             USERNAME
-            <button value={"username"} onClick={(e) => handleSortClick(e)}>
-              {showIcon ? <AiFillCaretUp /> : <AiFillCaretDown />}
+            <button onClick={() => handleSortClick("username",
+             sortOptions.sortType ==="asc" ? sortOptions.sortType === "desc" 
+        : sortOptions.sortType ==="asc") }>
             </button>
           </span>
         );
@@ -88,19 +112,17 @@ const Users = () => {
       accessor: "username",
       Cell: (cell) => (
         <div className="flex flex-col items-center justify-center m-0.5 mt-2 mb-2">
-          {!userOnEdit ? (
+          {    !userOnEdit ? (
             <p>{cell.row.original.username}</p>
           ) : (
             <input
               name="username"
-              value={userOnEdit.username}
               type={"text"}
               className="bg-red-500"
-              onChange={({ target }) =>
-                handleInputChange(target.name, target.value)
-              }
+              onChange={()=>handleInputChange()}
             />
-          )}
+          )
+          }
         </div>
       ),
     },
@@ -109,8 +131,9 @@ const Users = () => {
         return (
           <span>
             AGE
-            <button value={"age"} onClick={(e) => handleSortClick(e)}>
-              {showIcon ? <AiFillCaretUp /> : <AiFillCaretDown />}
+            <button onClick={() => handleSortClick("username",
+             sortOptions.sortType ==="asc" ? sortOptions.sortType === "desc" 
+        : sortOptions.sortType ==="asc") }>
             </button>
           </span>
         );
@@ -176,6 +199,7 @@ const Users = () => {
               >
                 Cancel
               </button>
+              <br/>
               <button
                 className="focus:outline-none focus:ring-2 focus:ring-offset-2 
          focus:ring-indigo-600 mx-auto transition duration-150 ease-in-out 
@@ -186,7 +210,6 @@ const Users = () => {
               </button>
             </div>
           )}
-          ,
           <br />
           {!userOnEdit && (
             <button
@@ -205,9 +228,12 @@ const Users = () => {
     },
   ];
 
+
+
+
   return (
     <>
-      <UserList data={currentList} columns={columns} />
+      <UserList data={toggleSortedList()}  columns={columns} />
       <Tooltip
         setShow={setShow}
         toggleModal={toggleDeleteModal}

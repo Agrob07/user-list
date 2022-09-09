@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Formik } from "formik";
 import * as yup from "yup";
 
-import { addUser, editUser } from "../features/counter/counterSlice";
+import { addUser, editUser } from "../features/counter/usersSlice";
 
 let schema = yup.object().shape({
   username: yup
