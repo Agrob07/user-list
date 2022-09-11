@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import UserList from "../components/UserList";
 import Tooltip from "../components/Tooltip";
@@ -15,8 +15,7 @@ const Users = () => {
   const [userOnEdit, setUserOnEdit] = useState(null);
   const [activeRowId, setActiveRowId] = useState("");
   const [inputValue, setInputValue] = useState("");
-  const [sortOptions, setSortOptions] = useState({})
-
+  const [sortOptions, setSortOptions] = useState({});
 
   const userList = useSelector(selectUsers);
   const [currentList, setCurrentList] = useState(userList);
@@ -37,105 +36,111 @@ const Users = () => {
     setShow(false);
   };
 
-  const handleSortClick = (sortBy,sortType) => {
+  const handleSortClick = (sortBy, sortType) => {
+    console.log(sortBy, sortType);
     setSortOptions({
       sortBy,
       sortType,
-    })
-};
+    });
+  };
 
-const toggleSortedList = () =>{
-  const filteredList = [...userList].sort((prev, next) => {  
-    if(sortOptions.sortType = "asc") {
-      if(sortOptions.sortBy === "age"){
-         setShowIcon(true)
-        { <AiFillCaretDown/>}  
-     }else{
-  setShowIcon(false)
-   { <AiFillCaretUp/>}
-   } 
-      if (prev < next ) {
-        return 1
-      } else if (next < prev){
-        return -1
-      }else {return 0}
-
-    }
-    if(sortOptions.sortType = "asc"){
-      if(sortOptions.sortBy === "username"){
-        setShowIcon(true)
-        { <AiFillCaretDown/>}  
-         return prev.localeCompare(next)
-       
-     }else{
-      setShowIcon(false)
-      { <AiFillCaretDown/>}  
-      return next.localeCompare(prev);
-     }
-    
-    }
-  });
-  return filteredList
-}
+  const filteredList = useMemo(
+    () =>
+      [...userList].sort((prev, next) => {
+        if (sortOptions.sortBy === "age") {
+          if (sortOptions.sortType === "asc") {
+            return prev.age - next.age;
+          } else {
+            return next.age - prev.age;
+          }
+        } else {
+          if (sortOptions.sortType === "asc") {
+            return prev.username.localeCompare(next.username);
+          } else {
+            return next.username.localeCompare(prev.username);
+          }
+        }
+      }),
+    [sortOptions.sortBy, sortOptions.sortType, userList]
+  );
 
   const handleEdit = (id) => {
     userList.forEach((user) => user.id === id && setUserOnEdit(user));
   };
 
-
   const handleEditSubmit = () => {
     dispatch(editUser(userOnEdit));
-    console.log(123,userOnEdit.username);
     setUserOnEdit(null);
   };
 
-
-  const handleInputChange = (key, value) =>{
-    setInputValue(userOnEdit.username)
-
-  }
-
+  const handleInputChange = (key, value) => {
+    setInputValue(userOnEdit.username);
+  };
 
   const columns = [
     {
       Header: () => {
         return (
-          <span>
+          <button
+            className="w-full flex justify-center item-center"
+            onClick={() =>
+              handleSortClick(
+                "username",
+                sortOptions.sortType === "asc" ? "desc" : "asc"
+              )
+            }
+          >
+            {" "}
             USERNAME
-            <button onClick={() => handleSortClick("username",
-             sortOptions.sortType ==="asc" ? sortOptions.sortType === "desc" 
-        : sortOptions.sortType ==="asc") }>
-            </button>
-          </span>
+            {sortOptions.sortBy === "username" && (
+              <span>
+                {sortOptions.sortType === "asc" ? (
+                  <AiFillCaretDown />
+                ) : (
+                  <AiFillCaretUp />
+                )}
+              </span>
+            )}
+          </button>
         );
       },
       accessor: "username",
       Cell: (cell) => (
         <div className="flex flex-col items-center justify-center m-0.5 mt-2 mb-2">
-          {    !userOnEdit ? (
+          {!userOnEdit ? (
             <p>{cell.row.original.username}</p>
           ) : (
             <input
               name="username"
               type={"text"}
               className="bg-red-500"
-              onChange={()=>handleInputChange()}
+              onChange={() => handleInputChange()}
             />
-          )
-          }
+          )}
         </div>
       ),
     },
     {
       Header: () => {
         return (
-          <span>
+          <button
+            className="w-full flex justify-center item-center"
+            onClick={() => {
+              const type = sortOptions.sortType === "asc" ? "desc" : "asc";
+              handleSortClick("age", type);
+            }}
+          >
             AGE
-            <button onClick={() => handleSortClick("username",
-             sortOptions.sortType ==="asc" ? sortOptions.sortType === "desc" 
-        : sortOptions.sortType ==="asc") }>
-            </button>
-          </span>
+            {sortOptions.sortBy === "age" && (
+              <span>
+                {sortOptions.sortType === "asc" ? (
+                  <AiFillCaretDown />
+                ) : (
+                  <AiFillCaretUp />
+                )}
+              </span>
+            )}
+          </button>
         );
       },
       accessor: "age",
@@ -199,7 +204,7 @@ const toggleSortedList = () =>{
               >
                 Cancel
               </button>
-              <br/>
+              <br />
               <button
                 className="focus:outline-none focus:ring-2 focus:ring-offset-2 
          focus:ring-indigo-600 mx-auto transition duration-150 ease-in-out 
@@ -228,12 +233,9 @@ const toggleSortedList = () =>{
     },
   ];
 
-
-
-
   return (
     <>
-      <UserList data={toggleSortedList()}  columns={columns} />
+      <UserList data={filteredList} columns={columns} />
       <Tooltip
         setShow={setShow}
         toggleModal={toggleDeleteModal}

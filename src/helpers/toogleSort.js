@@ -8,8 +8,6 @@
 //     });
 // };
 
-
-
 // state.userList = state.userList.sort((a, b) => {
 // if (state.sortDetails.sort === "asc") {
 // if (a[action.payload] < b[action.payload]) {
@@ -36,8 +34,6 @@
 // ? (state.sortDetails.sort = "desc")
 // : (state.sortDetails.sort = "asc");
 
-
-
 // {!userOnEdit ? (
 //   <p>{cell.row.original.username}</p>
 // ) : (
@@ -49,7 +45,6 @@
 //     onChange={({ target }) =>
 //       handleInputChange(target.name, target.value)
 
-
 // const handleInputChange = (key, value) => {
 //   setUserOnEdit(() => ({
 //     ...userOnEdit,
@@ -58,10 +53,6 @@
 
 //   console.log(inputValue);
 // };
-
-
-
-
 
 // const toggleSortedList = () =>{
 //   const filteredList = [...userList].sort((prev, next) => {
