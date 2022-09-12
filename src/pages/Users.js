@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import UserList from "../components/UserList";
 import Tooltip from "../components/Tooltip";
@@ -9,18 +9,17 @@ import {
 } from "../features/counter/usersSlice";
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 
+
 const Users = () => {
   const [show, setShow] = useState(false);
-  const [showIcon, setShowIcon] = useState(false);
   const [userOnEdit, setUserOnEdit] = useState(null);
   const [activeRowId, setActiveRowId] = useState("");
-  const [inputValue, setInputValue] = useState("");
   const [sortOptions, setSortOptions] = useState({});
 
   const userList = useSelector(selectUsers);
   const [currentList, setCurrentList] = useState(userList);
-
   const dispatch = useDispatch();
+  let formValues = useRef({});
 
   useEffect(() => {
     setCurrentList(userList);
@@ -37,7 +36,6 @@ const Users = () => {
   };
 
   const handleSortClick = (sortBy, sortType) => {
-    console.log(sortBy, sortType);
     setSortOptions({
       sortBy,
       sortType,
@@ -65,17 +63,22 @@ const Users = () => {
   );
 
   const handleEdit = (id) => {
-    userList.forEach((user) => user.id === id && setUserOnEdit(user));
+    currentList.map((user) => user.id === id && setUserOnEdit(user))
   };
 
   const handleEditSubmit = () => {
-    dispatch(editUser(userOnEdit));
+    
+    dispatch(editUser(formValues.current));
     setUserOnEdit(null);
+
   };
 
-  const handleInputChange = (key, value) => {
-    setInputValue(userOnEdit.username);
+  const handleInputChange = (field, value) => {
+    formValues.current[field] =  value
+  
   };
+
+
 
   const columns = [
     {
@@ -90,7 +93,6 @@ const Users = () => {
               )
             }
           >
-            {" "}
             USERNAME
             {sortOptions.sortBy === "username" && (
               <span>
@@ -111,10 +113,11 @@ const Users = () => {
             <p>{cell.row.original.username}</p>
           ) : (
             <input
+              defaultValue={cell.row.original.username}
               name="username"
               type={"text"}
-              className="bg-red-500"
-              onChange={() => handleInputChange()}
+              className="bg-gray-300"
+              onChange={(e)=>handleInputChange("username", e.target.value)}
             />
           )}
         </div>
@@ -149,7 +152,13 @@ const Users = () => {
           {!userOnEdit ? (
             <p>{cell.row.original.age}</p>
           ) : (
-            <input type={"text"} className="bg-red-500" />
+            <input
+            defaultValue={cell.row.original.age}
+            name="age"
+            type={"text"}
+            className="bg-gray-300"
+            onChange={(e)=>handleInputChange("age", e.target.value)}
+          />
           )}
         </div>
       ),
@@ -162,7 +171,13 @@ const Users = () => {
           {!userOnEdit ? (
             <p>{cell.row.original.city}</p>
           ) : (
-            <input type={"text"} className="bg-red-500" />
+            <input
+            defaultValue={cell.row.original.city}
+            name="city"
+            type={"text"}
+            className="bg-gray-300"
+            onChange={(e)=>handleInputChange("city", e.target.value)}
+          />
           )}
         </div>
       ),
@@ -175,8 +190,13 @@ const Users = () => {
           {!userOnEdit ? (
             <p>{cell.row.original.email}</p>
           ) : (
-            <input type={"text"} className="bg-red-500" />
-          )}
+    <input
+              defaultValue={cell.row.original.email}
+              name="email"
+              type={"text"}
+              className="bg-gray-300"
+              onChange={(e)=>handleInputChange("email", e.target.value)}
+            />          )}
         </div>
       ),
     },
@@ -193,6 +213,7 @@ const Users = () => {
               onClick={() => handleEdit(cell.row.original.id)}
             >
               Edit
+              
             </button>
           ) : (
             <div className="flex flex-col items-center justify-center m-0.5 mt-2 mb-2">
