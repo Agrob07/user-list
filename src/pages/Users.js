@@ -9,7 +9,6 @@ import {
 } from "../features/counter/usersSlice";
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 
-
 const Users = () => {
   const [show, setShow] = useState(false);
   const [userOnEdit, setUserOnEdit] = useState(null);
@@ -62,23 +61,18 @@ const Users = () => {
     [sortOptions.sortBy, sortOptions.sortType, userList]
   );
 
-  const handleEdit = (id) => {
-    currentList.map((user) => user.id === id && setUserOnEdit(user))
+  const handleEdit = (user) => {
+    setUserOnEdit(user);
   };
 
   const handleEditSubmit = () => {
-    
-    dispatch(editUser(formValues.current));
+    dispatch(editUser({ ...userOnEdit, ...formValues.current }));
     setUserOnEdit(null);
-
   };
 
   const handleInputChange = (field, value) => {
-    formValues.current[field] =  value
-  
+    formValues.current[field] = value;
   };
-
-
 
   const columns = [
     {
@@ -109,16 +103,16 @@ const Users = () => {
       accessor: "username",
       Cell: (cell) => (
         <div className="flex flex-col items-center justify-center m-0.5 mt-2 mb-2">
-          {!userOnEdit ? (
-            <p>{cell.row.original.username}</p>
-          ) : (
+          {userOnEdit && userOnEdit.id === cell.row.original.id ? (
             <input
               defaultValue={cell.row.original.username}
               name="username"
               type={"text"}
               className="bg-gray-300"
-              onChange={(e)=>handleInputChange("username", e.target.value)}
+              onChange={(e) => handleInputChange("username", e.target.value)}
             />
+          ) : (
+            <p>{cell.row.original.username}</p>
           )}
         </div>
       ),
@@ -149,16 +143,16 @@ const Users = () => {
       accessor: "age",
       Cell: (cell) => (
         <div className="flex flex-col items-center justify-center m-0.5 mt-2 mb-2">
-          {!userOnEdit ? (
-            <p>{cell.row.original.age}</p>
-          ) : (
+          {userOnEdit && userOnEdit.id === cell.row.original.id ? (
             <input
-            defaultValue={cell.row.original.age}
-            name="age"
-            type={"text"}
-            className="bg-gray-300"
-            onChange={(e)=>handleInputChange("age", e.target.value)}
-          />
+              defaultValue={cell.row.original.age}
+              name="age"
+              type={"text"}
+              className="bg-gray-300"
+              onChange={(e) => handleInputChange("age", e.target.value)}
+            />
+          ) : (
+            <p>{cell.row.original.age}</p>
           )}
         </div>
       ),
@@ -168,16 +162,16 @@ const Users = () => {
       accessor: "city",
       Cell: (cell) => (
         <div className="flex flex-col items-center justify-center m-0.5 mt-2 mb-2">
-          {!userOnEdit ? (
-            <p>{cell.row.original.city}</p>
-          ) : (
+          {userOnEdit && userOnEdit.id === cell.row.original.id ? (
             <input
-            defaultValue={cell.row.original.city}
-            name="city"
-            type={"text"}
-            className="bg-gray-300"
-            onChange={(e)=>handleInputChange("city", e.target.value)}
-          />
+              defaultValue={cell.row.original.city}
+              name="city"
+              type={"text"}
+              className="bg-gray-300"
+              onChange={(e) => handleInputChange("city", e.target.value)}
+            />
+          ) : (
+            <p>{cell.row.original.city}</p>
           )}
         </div>
       ),
@@ -187,16 +181,17 @@ const Users = () => {
       accessor: "email",
       Cell: (cell) => (
         <div className="flex flex-col items-center justify-center m-0.5 mt-2 mb-2">
-          {!userOnEdit ? (
-            <p>{cell.row.original.email}</p>
-          ) : (
-    <input
+          {userOnEdit && userOnEdit.id === cell.row.original.id ? (
+            <input
               defaultValue={cell.row.original.email}
               name="email"
               type={"text"}
               className="bg-gray-300"
-              onChange={(e)=>handleInputChange("email", e.target.value)}
-            />          )}
+              onChange={(e) => handleInputChange("email", e.target.value)}
+            />
+          ) : (
+            <p>{cell.row.original.email}</p>
+          )}
         </div>
       ),
     },
@@ -205,22 +200,12 @@ const Users = () => {
       accessor: "action",
       Cell: (cell) => (
         <div className="flex flex-col items-center justify-center m-0.5 mt-2 mb-2">
-          {!userOnEdit ? (
-            <button
-              className="focus:outline-none focus:ring-2 focus:ring-offset-2 
-         focus:ring-indigo-600 mx-auto transition duration-150 ease-in-out 
-         hover:bg-indigo-600 bg-indigo-700 rounded text-white px-4 sm:px-8 py-2 text-xs sm:text-sm"
-              onClick={() => handleEdit(cell.row.original.id)}
-            >
-              Edit
-              
-            </button>
-          ) : (
+          {userOnEdit && userOnEdit.id === cell.row.original.id ? (
             <div className="flex flex-col items-center justify-center m-0.5 mt-2 mb-2">
               <button
                 className="focus:outline-none focus:ring-2 focus:ring-offset-2 
-       focus:ring-indigo-600 mx-auto transition duration-150 ease-in-out 
-       hover:bg-indigo-600 bg-indigo-700 rounded text-white px-4 sm:px-8 py-2 text-xs sm:text-sm"
+     focus:ring-indigo-600 mx-auto transition duration-150 ease-in-out 
+     hover:bg-indigo-600 bg-indigo-700 rounded text-white px-4 sm:px-8 py-2 text-xs sm:text-sm"
                 onClick={() => setUserOnEdit(null)}
               >
                 Cancel
@@ -228,26 +213,35 @@ const Users = () => {
               <br />
               <button
                 className="focus:outline-none focus:ring-2 focus:ring-offset-2 
-         focus:ring-indigo-600 mx-auto transition duration-150 ease-in-out 
-         hover:bg-indigo-600 bg-indigo-700 rounded text-white px-4 sm:px-8 py-2 text-xs sm:text-sm"
+       focus:ring-indigo-600 mx-auto transition duration-150 ease-in-out 
+       hover:bg-indigo-600 bg-indigo-700 rounded text-white px-4 sm:px-8 py-2 text-xs sm:text-sm"
                 onClick={handleEditSubmit}
               >
                 Save
               </button>
             </div>
-          )}
-          <br />
-          {!userOnEdit && (
-            <button
-              onClick={() => {
-                toggleDeleteModal(cell.row.original.id);
-              }}
-              className="focus:outline-none focus:ring-2 focus:ring-offset-2 
-         focus:ring-indigo-600 mx-auto transition duration-150 ease-in-out 
-         hover:bg-indigo-600 bg-indigo-700 rounded text-white px-4 sm:px-8 py-2 text-xs sm:text-sm"
-            >
-              Delete
-            </button>
+          ) : (
+            <div className="flex flex-col gap-2">
+              <button
+                className="focus:outline-none focus:ring-2 focus:ring-offset-2 
+       focus:ring-indigo-600 mx-auto transition duration-150 ease-in-out 
+       hover:bg-indigo-600 bg-indigo-700 rounded text-white px-4 sm:px-8 py-2 text-xs sm:text-sm"
+                onClick={() => handleEdit(cell.row.original)}
+              >
+                Edit
+              </button>
+
+              <button
+                onClick={() => {
+                  toggleDeleteModal(cell.row.original.id);
+                }}
+                className="focus:outline-none focus:ring-2 focus:ring-offset-2 
+            focus:ring-indigo-600 mx-auto transition duration-150 ease-in-out 
+            hover:bg-indigo-600 bg-indigo-700 rounded text-white px-4 sm:px-8 py-2 text-xs sm:text-sm"
+              >
+                Delete
+              </button>
+            </div>
           )}
         </div>
       ),
