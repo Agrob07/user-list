@@ -18,7 +18,7 @@ function TableList({ data, columns }) {
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
-                <th className="w-1/5" {...column.getHeaderProps()}>
+                <th className="w-1/6" {...column.getHeaderProps()}>
                   {column.render("Header")}
                 </th>
               ))}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from "react";
+import React, { useState,  useMemo, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import UserList from "../components/UserList";
 import Tooltip from "../components/Tooltip";
@@ -16,13 +16,10 @@ const Users = () => {
   const [sortOptions, setSortOptions] = useState({});
 
   const userList = useSelector(selectUsers);
-  const [currentList, setCurrentList] = useState(userList);
   const dispatch = useDispatch();
   let formValues = useRef({});
 
-  useEffect(() => {
-    setCurrentList(userList);
-  }, [userList]);
+
 
   const toggleDeleteModal = (rowId) => {
     setActiveRowId(rowId);
@@ -75,6 +72,24 @@ const Users = () => {
   };
 
   const columns = [
+    {
+      Header: "OPTION",
+      accessor: "option",
+      Cell: (cell) => (
+        <div className="flex flex-col items-center justify-center m-0.5 mt-2 mb-2">
+          {userOnEdit && userOnEdit.id === cell.row.original.id ? (
+            <select 
+            className="w-full flex justify-center item-center"
+            name="option" onChange={(e) => handleInputChange("option", e.target.value)}>
+             <option value="QA">QA</option>
+              <option value="Developer">Developer</option>   
+          </select>
+          ) : (
+            <p>{cell.row.original.option}</p>
+          )}
+        </div>
+      ),
+    },
     {
       Header: () => {
         return (
@@ -142,7 +157,7 @@ const Users = () => {
       },
       accessor: "age",
       Cell: (cell) => (
-        <div className="flex flex-col items-center justify-center m-0.5 mt-2 mb-2">
+        <div className="flex flex-col items-center justify-center m-0.5 mt-2 mb-2 ">
           {userOnEdit && userOnEdit.id === cell.row.original.id ? (
             <input
               defaultValue={cell.row.original.age}
@@ -250,6 +265,10 @@ const Users = () => {
 
   return (
     <>
+  
+
+
+     
       <UserList data={filteredList} columns={columns} />
       <Tooltip
         setShow={setShow}
@@ -258,6 +277,7 @@ const Users = () => {
         deleteRow={deleteRow}
         rowID={activeRowId}
       />
+      
     </>
   );
 };

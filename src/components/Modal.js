@@ -20,6 +20,11 @@ let schema = yup.object().shape({
     .max(20, "username is too long")
     .required("No city provided."),
   email: yup.string().email().required("No email provided."),
+  option : yup.string()
+  .required()
+  .oneOf(["QA", "Developer"])
+  .label("Wrong option"),
+
 });
 
 export default function Modal({ show, setShow, user }) {
@@ -36,6 +41,7 @@ export default function Modal({ show, setShow, user }) {
 
   return (
     <div className="py-64">
+      
       <div className="py-12">
         <div
           className="w-full flex items-center w-full justify-center"
@@ -65,6 +71,7 @@ export default function Modal({ show, setShow, user }) {
               initialValues={user ? user : initValues}
               validationSchema={schema}
               onSubmit={(values) => {
+                console.log(values,152);
                 user
                   ? dispatch(
                       editUser({
@@ -87,6 +94,19 @@ export default function Modal({ show, setShow, user }) {
               {(props) => (
                 <form onSubmit={props.handleSubmit}>
                   <div className="w-full mt-8">
+                   
+                    <select name="option" id="dropdown" value={props.values.option}
+                      onChange={props.handleChange}
+                    className="w-full py-4 focus:outline-none 
+                    text-base leading-4 text-gray-600 border-gray-500 border-2">Test
+                     <option  value="default">Please choose a category</option>
+                        <option value="QA">QA</option>
+                        <option value="Developer">Developer</option>   
+                    </select>
+                    {props.errors.option &&  (
+                      <p  className="bg-red-500">Wrong option</p>
+                    )}
+                    
                     <input
                       name="username"
                       onChange={props.handleChange}
@@ -99,7 +119,7 @@ export default function Modal({ show, setShow, user }) {
                     {props.errors.username && props.touched.username && (
                       <p className="bg-red-500">Wrong username</p>
                     )}
-                    <input
+                  <input
                       name="age"
                       onChange={props.handleChange}
                       value={props.values.age}
@@ -122,7 +142,7 @@ export default function Modal({ show, setShow, user }) {
                     />
                     {props.errors.city && props.touched.username && (
                       <p className="bg-red-500">Wrong city</p>
-                    )}
+                    )}  
                     <input
                       name="email"
                       onChange={props.handleChange}

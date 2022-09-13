@@ -51,7 +51,6 @@
 //     [key]: value,
 //   }));
 
-//   console.log(inputValue);
 // };
 
 // const toggleSortedList = () =>{

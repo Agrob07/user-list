@@ -30,7 +30,6 @@ export const userSlice = createSlice({
     },
     editUser: (state, action) => {
       state.userList = state.userList.map((user, idx) => {
-        console.log(action.payload);
         return user.id === action.payload.id
           ? (state.userList[idx] = action.payload)
           : user;
