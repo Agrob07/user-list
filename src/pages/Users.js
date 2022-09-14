@@ -15,10 +15,10 @@ const Users = () => {
   const [activeRowId, setActiveRowId] = useState("");
   const [sortOptions, setSortOptions] = useState({});
 
+
   const userList = useSelector(selectUsers);
   const dispatch = useDispatch();
   let formValues = useRef({});
-
 
 
   const toggleDeleteModal = (rowId) => {
@@ -37,6 +37,8 @@ const Users = () => {
       sortType,
     });
   };
+
+
 
   const filteredList = useMemo(
     () =>
@@ -75,20 +77,7 @@ const Users = () => {
     {
       Header: "OPTION",
       accessor: "option",
-      Cell: (cell) => (
-        <div className="flex flex-col items-center justify-center m-0.5 mt-2 mb-2">
-          {userOnEdit && userOnEdit.id === cell.row.original.id ? (
-            <select 
-            className="w-full flex justify-center item-center"
-            name="option" onChange={(e) => handleInputChange("option", e.target.value)}>
-             <option value="QA">QA</option>
-              <option value="Developer">Developer</option>   
-          </select>
-          ) : (
-            <p>{cell.row.original.option}</p>
-          )}
-        </div>
-      ),
+ 
     },
     {
       Header: () => {
@@ -269,7 +258,7 @@ const Users = () => {
 
 
      
-      <UserList data={filteredList} columns={columns} />
+      <UserList a={activeRowId} data={filteredList} columns={columns} />
       <Tooltip
         setShow={setShow}
         toggleModal={toggleDeleteModal}

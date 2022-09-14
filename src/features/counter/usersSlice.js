@@ -3,8 +3,8 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 const initialState = {
   status: "idle",
   userList: [],
-  sortDetails: {},
 };
+
 
 // export const fetchUsersAsync = createAsyncThunk(
 //   'userlist/fetchUsers',
@@ -18,7 +18,6 @@ const initialState = {
 export const userSlice = createSlice({
   name: "userList",
   initialState,
-
   reducers: {
     addUser: (state, action) => {
       state.userList = [...state.userList, action.payload];
@@ -57,5 +56,7 @@ export const {
 } = userSlice.actions;
 
 export const selectUsers = (state) => state.users.userList;
+
+
 
 export default userSlice.reducer;

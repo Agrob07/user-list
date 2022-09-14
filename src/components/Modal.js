@@ -71,7 +71,6 @@ export default function Modal({ show, setShow, user }) {
               initialValues={user ? user : initValues}
               validationSchema={schema}
               onSubmit={(values) => {
-                console.log(values,152);
                 user
                   ? dispatch(
                       editUser({
@@ -83,6 +82,8 @@ export default function Modal({ show, setShow, user }) {
                       addUser({
                         id: uuidv4(),
                         ...values,
+                        
+
                       })
                     );
                 setTimeout(() => {

@@ -71,3 +71,25 @@
 //   });
 //   return filteredList
 // }
+
+
+
+
+
+
+
+
+// Cell: (cell) => (
+//   <div className="flex flex-col items-center justify-center m-0.5 mt-2 mb-2">
+//     {userOnEdit && userOnEdit.id === cell.row.original.id ? (
+//       <select 
+//       className="w-full flex justify-center item-center"
+//       name="option" onChange={(e) => handleInputChange("option", e.target.value)}>
+//        <option value="QA">QA</option>
+//         <option value="Developer">Developer</option>   
+//     </select>
+//     ) : (
+//       <p>{cell.row.original.option}</p>
+//     )}
+//   </div>
+// ),

@@ -1,11 +1,12 @@
 import React from "react";
 import { useTable } from "react-table";
 
-function TableList({ data, columns }) {
+function TableList({ data,data1, columns }) {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({
       columns,
       data,
+      data1
     });
   return (
     <>
