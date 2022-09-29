@@ -2,9 +2,8 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   status: "idle",
-  userList: [],
+  qaList: [],
 };
-
 
 // export const fetchUsersAsync = createAsyncThunk(
 //   'userlist/fetchUsers',
@@ -15,25 +14,23 @@ const initialState = {
 //   }
 // );
 
-export const userSlice = createSlice({
-  name: "userList",
+export const qaSlice = createSlice({
+  name: "qaList",
   initialState,
   reducers: {
-    addUser: (state, action) => {
-      state.userList = [...state.userList, action.payload];
+    addQA: (state, action) => {
+      state.qaList = [...state.qaList, action.payload];
     },
-    deleteUser: (state, action) => {
-      state.userList = state.userList.filter(
-        (user) => user.id !== action.payload
-      );
+    deleteQA: (state, action) => {
+      state.qaList = state.qaList.filter((user) => user.id !== action.payload);
     },
-    editUser: (state, action) => {
-      state.userList = state.userList.map((user, idx) => {
+    editQA: (state, action) => {
+      state.qaList = state.qaList.map((user, idx) => {
         return user.id === action.payload.id
-          ? (state.userList[idx] = action.payload)
+          ? (state.qaList[idx] = action.payload)
           : user;
       });
-    }
+    },
   },
 
   // extraReducers: (builder) => {
@@ -49,14 +46,8 @@ export const userSlice = createSlice({
   // },
 });
 
-export const {
-  addUser,
-  deleteUser,
-  editUser
-} = userSlice.actions;
+export const { addQA, deleteQA, editQA } = qaSlice.actions;
 
-export const selectUsers = (state) => state.users.userList;
+export const selectQAs = (state) => state.qa.qaList;
 
-
-
-export default userSlice.reducer;
+export default qaSlice.reducer;

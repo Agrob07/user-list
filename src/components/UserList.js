@@ -1,31 +1,66 @@
-import React from "react";
-import { useDrag, useDrop } from "react-dnd";
+import React, { useState, useMemo } from "react";
+import SearchUserModal from "./SearchUserModal";
 import TableList from "./TableList";
 
-const UserList = ({ data, columns, a }) => {
-  
-  console.log(a,78);
+const UserList = ({ data, columns }) => {
+  const [itemsPerPage, setItemsPerPage] = useState(2);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [inputValue, setInptValue] = useState("");
 
-  const  filterData = data.filter((item)=>item.option==="Developer"  )
-  const  filterData1 = data.filter((item)=>item.option==="QA"  )
+  const dataSearch = useMemo(() => {
+    return inputValue
+      ? data.filter((item) => {
+          const exceptId = { ...item, id: "" };
+          return Object.values(exceptId).some((elem) => {
+            return parseInt(elem)
+              ? elem === inputValue
+              : elem.includes(inputValue);
+          });
+        })
+      : data;
+  }, [data, inputValue]);
 
+  const range = Math.ceil(dataSearch.length / itemsPerPage);
+  const pages = Array.from({ length: range }, (_, i) => i + 1);
+  const prev = currentPage - 1;
+  const startIndx = prev * itemsPerPage;
+  const endIndex = startIndx + itemsPerPage;
+
+  const paginatedData = useMemo(() => {
+    return dataSearch.filter((_, idx) => {
+      return idx >= startIndx && idx < endIndex;
+    });
+  }, [dataSearch, endIndex, startIndx]);
 
   return (
-    <div className="flex justify-between items-center w-full gap-12 m-2 p-2">
-   
-       
-    
-      <div className="bg-slate-100	w-full">
-      <TableList  data={filterData}  columns={columns} />
-        
+    <div className="flex flex-col w-1/2 border-2 ">
+      {paginatedData.length ? (
+        <TableList data={paginatedData} columns={columns} />
+      ) : (
+        <div>No such result</div>
+      )}
+      <div className="flex items-center justify-center">
+        {pages.map((item, idx) => (
+          <button
+            key={idx}
+            type="button"
+            className="text-brand w-10 h-10
+             flex justify-center items-center  
+                cursor-pointer focus:bg-gray-100 dark:
+               focus:bg-sky-200 hover:bg-sky-100 "
+            onClick={() => {
+              setCurrentPage(item);
+            }}
+          >
+            {item}
+          </button>
+        ))}
       </div>
-      <div className="bg-slate-100	w-full">
-
-      <TableList   data={filterData1}  columns={columns} />
-      </div>
-
-
-
+      <SearchUserModal
+        inputValue={inputValue}
+        setCurrentPage={setCurrentPage}
+        setInptValue={setInptValue}
+      />
     </div>
   );
 };

@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import Modal from "../components/Modal";
+import CreateUserModal from "../components/CreateUserModal";
 
 const Home = () => {
   const [show, setShow] = useState(false);
 
   return (
     <>
-      <Modal show={show} setShow={setShow} />
+      <CreateUserModal show={show} setShow={setShow} />
     </>
   );
 };
