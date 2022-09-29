@@ -3,17 +3,16 @@ import { useTable } from "react-table";
 import update from "immutability-helper";
 import TableCard from "./TableCard";
 
-function TableList({ data, data1, columns }) {
+function TableList({ data,  columns }) {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({
       columns,
       data,
-      data1,
     });
   const [cards, setCards] = useState(rows);
   useEffect(() => {
     setCards(rows);
-  }, [data, data1, rows]);
+  }, [data, rows]);
 
   const moveCard = useCallback((dragIndex, hoverIndex) => {
     setCards((prevCards) =>
