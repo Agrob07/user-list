@@ -1,6 +1,10 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import qaListReducer, { addQA } from "../features/qaSlice";
-import developerListReducer, { addDev } from "../features/developerSlice";
+import qaListReducer from "../features/qaSlice";
+import developerListReducer from "../features/developerSlice";
+import clientsListReducer from "../features/clientsSlice";
+import createSagaMiddleware from "redux-saga";
+
+import saga from "./saga";
 
 import {
   createStateSyncMiddleware,
@@ -27,6 +31,7 @@ const config = {
 const rootReducer = combineReducers({
   qa: qaListReducer,
   developer: developerListReducer,
+  client: clientsListReducer,
 });
 
 const persistConfig = {
@@ -36,6 +41,7 @@ const persistConfig = {
 
 const someMiddle = createStateSyncMiddleware();
 const persistedReducer = persistReducer(persistConfig, rootReducer);
+let sagaMiddleware = createSagaMiddleware();
 
 const store = configureStore({
   reducer: persistedReducer,
@@ -44,8 +50,10 @@ const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat(someMiddle),
+    }).concat(someMiddle, sagaMiddleware),
 });
+
+sagaMiddleware.run(saga);
 
 initMessageListener(store);
 // export const persister = persistStore(store);
