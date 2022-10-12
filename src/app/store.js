@@ -27,6 +27,7 @@ const rootReducer = combineReducers({
   client: clientsListReducer,
 });
 
+
 const persistConfig = {
   key: "root",
   storage,
@@ -49,6 +50,6 @@ const store = configureStore({
 sagaMiddleware.run(saga);
 
 initMessageListener(store);
-export const persister = persistStore(store);
+// export const persister = persistStore(store)
 export const withState = withReduxStateSync(store);
 export default store;

@@ -25,6 +25,7 @@ function Tooltip({ show, setShow, deleteRow, rowProps }) {
                 <button
                   onClick={() => {
                     deleteRow(rowProps);
+                    setShow(!show);
                   }}
                   className="text-xs font-medium leading-3 text-center text-white px-3 py-2
        bg-indigo-700 rounded-md w-full hover:bg-indigo-600 transform duration-300 ease-in-out"

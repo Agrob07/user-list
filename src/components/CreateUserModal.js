@@ -4,7 +4,6 @@ import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { Formik } from "formik";
 import * as yup from "yup";
-import { sagaActions } from "../app/sagaActions";
 
 import { addQA } from "../features/qaSlice";
 import { addDev } from "../features/developerSlice";
@@ -43,7 +42,6 @@ export default function CreateUserModal({ show, setShow }) {
 
   const handleClientRedirect = () => {
     navigate("/clients");
-    dispatch({ type: sagaActions.FETCH_DATA_SAGA });
   };
 
   return (

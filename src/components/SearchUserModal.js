@@ -43,6 +43,7 @@ const SearchUserModal = ({ inputValue, setInptValue }) => {
             >
               Clear Filter
             </button>
+            
           )}
         </form>
       )}
